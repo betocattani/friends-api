@@ -3,7 +3,10 @@
 Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
-      resources :users, only: %I[create index]
+      resources :users, only: :index
+
+      post '/login', to: 'authentication#create'
+      post '/signup', to: 'users#create'
     end
   end
 end

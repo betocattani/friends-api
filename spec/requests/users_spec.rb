@@ -7,7 +7,7 @@ describe 'Users API', type: :request do
     context 'with valid params' do
       it 'creates a new user' do
         expect {
-          post '/api/v1/users', params: {
+          post '/api/v1/signup', params: {
             user: {
               email: 'test@axiomzen.co',
               name: 'Alex Zimmerman',
@@ -23,7 +23,7 @@ describe 'Users API', type: :request do
     context 'with invalid params' do
       it 'does not creates a new user and returns errors' do
         expect {
-          post '/api/v1/users', params: {
+          post '/api/v1/signup', params: {
             user: {
               email: 'test@axiomzen',
               name: 'Alex Zimmerman',
