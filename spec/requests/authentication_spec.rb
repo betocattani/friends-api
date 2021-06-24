@@ -4,47 +4,43 @@ require 'rails_helper'
 
 describe 'Authentication', type: :request do
   describe 'POST /login' do
-    it 'authenticates the client' do
-      user = create(:user)
+    let(:user) { create(:user) }
 
+    it 'returns an authenticated user' do
       post '/api/v1/login', params: { login: { email: user.email, password: user.password } }
-
-      expect(response).to have_http_status(:created)
 
       token = AuthenticationTokenService.call(user.id)
 
-      json = JSON.parse(response.body)
-
-      expect(json['token']).to eq(token)
+      expect(response).to have_http_status(:created)
+      expect(JSON.parse(response.body)['token']).to eq(token)
     end
 
-    it 'returns error when email is missing' do
-      user = create(:user)
+    it 'returns not_found when does not exist an user with the requested email' do
+      post '/api/v1/login', params: { login: { email: 'non_existent@mail.com', password: user.password } }
 
-      post '/api/v1/login', params: { login: { password: user.password } }
-
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:not_found)
       expect(JSON.parse(response.body)).to eq(
         {
-          "errors": [
+          errors: [
             {
-              "detail": 'Invalid username or password'
+              detail: "Couldn't find User",
+              status: 404
             }
           ]
         }.as_json
       )
     end
 
-    it 'returns error when password is missing' do
-      user = create(:user)
-      post '/api/v1/login', params: { login: { email: user.email, password: nil } }
+    it 'returns unauthorized when the password does not match' do
+      post '/api/v1/login', params: { login: { email: user.email, password: 'wrong_password' } }
 
       expect(response).to have_http_status(:unauthorized)
       expect(JSON.parse(response.body)).to eq(
         {
-          "errors": [
+          errors: [
             {
-              "detail": 'Invalid username or password'
+              detail: 'Invalid username or password',
+              status: 401
             }
           ]
         }.as_json

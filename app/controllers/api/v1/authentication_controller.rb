@@ -4,14 +4,14 @@ module Api
   module V1
     class AuthenticationController < ApplicationController
       def create
-        user = User.find_by(email: authentication_params[:email])
+        user = User.find_by!(email: authentication_params[:email])
 
-        if user && authenticate(user)
+        if authenticate(user)
           token = AuthenticationTokenService.call(user.id)
 
           render json: { token: token }, status: :created
         else
-          respond_unauthorized('Invalid username or password')
+          render json: { errors: [{ status: 401, detail: 'Invalid username or password' }] }, status: :unauthorized
         end
       end
 
