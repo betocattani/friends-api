@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       resources :users, only: :index
 
       post '/login', to: 'authentication#create'
-      post '/signup', to: 'users#create'
+      post '/signup', to: 'registration#create'
     end
   end
 end
