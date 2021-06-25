@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  include ActionController::HttpAuthentication::Token
+
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActionController::ParameterMissing, with: :invalid_request
 
@@ -24,5 +26,14 @@ class ApplicationController < ActionController::API
         { field: field.to_s, detail: error_message }
       end
     end
+  end
+
+  def authenticate_user
+    token, _options = token_and_options(request)
+    user_id = AuthenticationTokenService.decode(token)
+
+    User.find(user_id)
+  rescue ActiveRecord::RecordNotFound
+    render json: { status: 401, error: 'Unauthorized' }, status: :unauthorized
   end
 end
