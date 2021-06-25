@@ -9,7 +9,7 @@ describe 'Authentication', type: :request do
       post '/api/v1/login', params: { login: { email: user.email, password: user.password } }
 
       expect(response).to have_http_status(:created)
-      expect(JSON.parse(response.body)).to include('token')
+      expect(response_body).to include('token')
     end
 
     it 'returns error when email is missing' do
@@ -17,7 +17,7 @@ describe 'Authentication', type: :request do
 
       expect(response).to have_http_status(:unprocessable_entity)
 
-      expect(JSON.parse(response.body)['error']).to eq('param is missing or the value is empty: email')
+      expect(response_body['error']).to eq('param is missing or the value is empty: email')
     end
 
     it 'returns error when password is missing' do
@@ -25,7 +25,7 @@ describe 'Authentication', type: :request do
 
       expect(response).to have_http_status(:unprocessable_entity)
 
-      expect(JSON.parse(response.body)['error']).to eq('param is missing or the value is empty: password')
+      expect(response_body['error']).to eq('param is missing or the value is empty: password')
     end
 
     it 'returns not_found when does not exist an user with the requested email' do
@@ -33,7 +33,7 @@ describe 'Authentication', type: :request do
       post '/api/v1/login', params: { login: { email: 'non_existent@mail.com', password: user.password } }
 
       expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)).to eq(
+      expect(response_body).to eq(
         {
           error: "Couldn't find User",
           status: 404
@@ -46,7 +46,7 @@ describe 'Authentication', type: :request do
       post '/api/v1/login', params: { login: { email: user.email, password: 'wrong_password' } }
 
       expect(response).to have_http_status(:unauthorized)
-      expect(JSON.parse(response.body)).to eq(
+      expect(response_body).to eq(
         { error: 'Invalid password', status: 401 }.as_json
       )
     end

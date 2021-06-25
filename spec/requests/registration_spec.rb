@@ -17,7 +17,7 @@ describe 'Registration', type: :request do
         }.to change(User, :count).from(0).to(1)
 
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)).to include('token')
+        expect(response_body).to include('token')
       end
     end
 
@@ -33,7 +33,7 @@ describe 'Registration', type: :request do
         }.not_to change(User, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to eq({
+        expect(response_body).to eq({
           errors: [
             {
               field: 'password',
