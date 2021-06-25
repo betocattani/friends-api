@@ -7,16 +7,15 @@ class ApplicationController < ActionController::API
   private
 
   def respond_with_errors(object)
-    render json: { errors: serialize_errors(object) }, status: :unprocessable_entity
+    render json: { status: 422, errors: serialize_errors(object) }, status: :unprocessable_entity
   end
 
   def invalid_request(error)
-    render json: { status: 422, error: error.message }, status: :unprocessable_entity
+    render json: { status: 422, error: error.original_message }, status: :unprocessable_entity
   end
 
   def record_not_found(exception)
-    errors = { errors: [{ status: 404, detail: exception.message }] }
-    render json: errors, status: :not_found
+    render json: { status: 404, error: exception.message }, status: :not_found
   end
 
   def serialize_errors(object)

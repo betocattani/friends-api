@@ -39,7 +39,8 @@ describe 'Registration', type: :request do
               field: 'password',
               detail: "can't be blank"
             }
-          ]
+          ],
+          status: 422
         }.as_json)
       end
     end
