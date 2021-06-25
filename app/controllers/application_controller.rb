@@ -6,6 +6,8 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActionController::ParameterMissing, with: :invalid_request
 
+  MAX_PAGINATION = 100
+
   private
 
   def respond_with_errors(object)
@@ -35,5 +37,9 @@ class ApplicationController < ActionController::API
     User.find(user_id)
   rescue ActiveRecord::RecordNotFound
     render json: { status: 401, error: 'Unauthorized' }, status: :unauthorized
+  end
+
+  def limit
+    [params.fetch(:limit, MAX_PAGINATION).to_i, 100].min
   end
 end

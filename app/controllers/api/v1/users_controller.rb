@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_user, only: :index
 
       def index
-        users = User.all
+        users = User.limit(limit).offset(params[:offset])
 
         render json: users
       end
