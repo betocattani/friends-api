@@ -12,7 +12,7 @@ describe 'Users API', type: :request do
         get '/api/v1/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
-        expect(response_body.pluck('email')).to eq(['user_one@mail.com', 'user_two@mail.com'])
+        expect(response_body['users'].pluck('email')).to eq(['user_one@mail.com', 'user_two@mail.com'])
 
         expect(response).to have_http_status(:success)
       end
@@ -27,7 +27,7 @@ describe 'Users API', type: :request do
 
         expect(response_body.size).to eq(1)
         expect(response).to have_http_status(:success)
-        expect(response_body.pluck('email')).to eq(['user_one@mail.com'])
+        expect(response_body['users'].pluck('email')).to eq(['user_one@mail.com'])
       end
 
       it 'retuns a subset of users based on limit and offset' do
@@ -40,7 +40,7 @@ describe 'Users API', type: :request do
 
         expect(response_body.size).to eq(1)
         expect(response).to have_http_status(:success)
-        expect(response_body.pluck('email')).to eq(['user_two@mail.com'])
+        expect(response_body['users'].pluck('email')).to eq(['user_two@mail.com'])
       end
     end
 

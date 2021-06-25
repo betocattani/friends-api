@@ -38,7 +38,7 @@ describe 'Friendship', type: :request do
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
         expect(response).to have_http_status(:success)
-        expect(response_body.first).to eq(
+        expect(response_body['friends'].first).to eq(
           {email: friend.email, name: friend.name }.as_json
         )
       end

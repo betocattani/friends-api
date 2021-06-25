@@ -8,7 +8,7 @@ module Api
       def index
         friends = @current_user.friends
 
-        render json: friends, each_serializer: Api::V1::FriendsSerializer
+        render json: friends, root: 'friends', each_serializer: Api::V1::FriendsSerializer
       end
 
       def create
