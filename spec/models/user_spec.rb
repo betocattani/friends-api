@@ -37,4 +37,21 @@ describe User do
     user.valid?
     expect(user.errors['email']).to include('has already been taken')
   end
+
+  context 'friends' do
+    it 'user with friends' do
+      user = create(:user)
+      friend = create(:user)
+
+      user.friendships.create(friend_id: friend.id)
+
+      expect(user.friends).to include(friend)
+    end
+
+    it 'user without friends' do
+      user = create(:user)
+
+      expect(user.friends).to be_empty
+    end
+  end
 end
