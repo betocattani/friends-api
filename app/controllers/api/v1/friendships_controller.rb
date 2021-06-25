@@ -3,13 +3,18 @@
 module Api
   module V1
     class FriendshipsController < ApplicationController
+      before_action :authenticate_user, only: :create
+
       def create
-        user = User.first
         friend = User.find_by(email: params[:email])
 
-        friendship = Friendship.create(user_id: user.id, friend_id: friend.id)
+        friendship = Friendship.new(user_id: @current_user.id, friend_id: friend.id)
 
-        render json: { friendship: FriendshipSerializer.new(friendship).as_json }, status: :created
+        if friendship.save
+          render json: { friendship: FriendshipSerializer.new(friendship).as_json }, status: :created
+        else
+          respond_with_errors(friendship)
+        end
       end
     end
   end

@@ -34,7 +34,7 @@ class ApplicationController < ActionController::API
     token, _options = token_and_options(request)
     user_id = AuthenticationTokenService.decode(token)
 
-    User.find(user_id)
+    @current_user ||= User.find(user_id)
   rescue ActiveRecord::RecordNotFound
     render json: { status: 401, error: 'Unauthorized' }, status: :unauthorized
   end
