@@ -32,7 +32,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_user
     token, _options = token_and_options(request)
-    user_id = AuthenticationTokenService.decode(token)
+    user_id = AuthenticationTokenService.decode(token) if token
 
     @current_user ||= User.find(user_id)
   rescue ActiveRecord::RecordNotFound

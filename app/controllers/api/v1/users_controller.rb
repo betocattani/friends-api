@@ -8,7 +8,7 @@ module Api
       def index
         users = User.limit(limit).offset(params[:offset])
 
-        render json: users
+        render json: users, each_serializer: Api::V1::UserSerializer
       end
     end
   end

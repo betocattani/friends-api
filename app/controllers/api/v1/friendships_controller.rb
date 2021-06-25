@@ -3,7 +3,13 @@
 module Api
   module V1
     class FriendshipsController < ApplicationController
-      before_action :authenticate_user, only: :create
+      before_action :authenticate_user, only: [:create, :index]
+
+      def index
+        friends = @current_user.friends
+
+        render json: friends, each_serializer: Api::V1::FriendsSerializer
+      end
 
       def create
         friend = User.find_by(email: params[:email])

@@ -25,4 +25,23 @@ describe 'Friendship', type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
   end
+
+  describe 'GET /users/me/friends' do
+    context 'when exist friends and token is valid' do
+      it 'returns a list of friends' do
+        current_user = create(:user, id: 1, email: 'user_one@mail.com')
+        friend = create(:user, id: 2, email: 'user_two@mail.com')
+
+        Friendship.create(user_id: current_user.id, friend_id: friend.id)
+
+        get '/api/v1/users/me/friends',
+            headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
+
+        expect(response).to have_http_status(:success)
+        expect(response_body.first).to eq(
+          {email: friend.email, name: friend.name }.as_json
+        )
+      end
+    end
+  end
 end

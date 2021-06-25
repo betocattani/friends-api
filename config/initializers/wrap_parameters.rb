@@ -13,4 +13,4 @@ ActiveSupport.on_load(:active_record) do
   self.include_root_in_json = true
 end
 
-# ActiveModelSerializers.config.json_include_toplevel_object = true
+ActiveModelSerializers.config.json_include_toplevel_object = true

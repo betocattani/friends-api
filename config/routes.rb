@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users, only: :index
 
       post '/users/:email/friendship', to: 'friendships#create', constraints: { email: /.+@.+\..*/ }
+      get '/users/me/friends', to: 'friendships#index'
 
       post '/login', to: 'authentication#create'
       post '/signup', to: 'registration#create'
