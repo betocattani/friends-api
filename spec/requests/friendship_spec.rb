@@ -43,5 +43,19 @@ describe 'Friendship', type: :request do
         )
       end
     end
+
+    context 'when exist friends and token is invalid' do
+      it 'returns a list of friends' do
+        current_user = create(:user, id: 1, email: 'user_one@mail.com')
+        friend = create(:user, id: 2, email: 'user_two@mail.com')
+
+        Friendship.create(user_id: current_user.id, friend_id: friend.id)
+
+        get '/api/v1/users/me/friends',
+            headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end
