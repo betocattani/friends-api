@@ -5,7 +5,7 @@ module Api
     class AuthenticationController < ApplicationController
       class AuthenticationError < StandardError; end
 
-      rescue_from AuthenticationError, with: :handle_unauthenticated
+      rescue_from AuthenticationError, with: :unauthorized
 
       def create
         return unless validate_authentication_params
@@ -22,7 +22,7 @@ module Api
         @user ||= User.find_by!(email: authentication_params[:email])
       end
 
-      def handle_unauthenticated
+      def unauthorized
         render json: { status: 401, error: 'Invalid password' }, status: :unauthorized
       end
 

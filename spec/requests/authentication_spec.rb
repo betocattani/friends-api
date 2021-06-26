@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 describe 'Authentication', type: :request do
+  let(:user) { create(:user) }
+
   describe 'POST /login' do
     it 'returns an authenticated user' do
-      user = create(:user)
       post '/api/v1/login', params: { login: { email: user.email, password: user.password } }
 
       expect(response).to have_http_status(:created)
@@ -18,6 +19,7 @@ describe 'Authentication', type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
 
       expect(response_body['error']).to eq('param is missing or the value is empty: email')
+      expect(response_body['status']).to eq(422)
     end
 
     it 'returns error when password is missing' do
@@ -26,29 +28,23 @@ describe 'Authentication', type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
 
       expect(response_body['error']).to eq('param is missing or the value is empty: password')
+      expect(response_body['status']).to eq(422)
     end
 
     it 'returns not_found when does not exist an user with the requested email' do
-      user = create(:user)
       post '/api/v1/login', params: { login: { email: 'non_existent@mail.com', password: user.password } }
 
       expect(response).to have_http_status(:not_found)
-      expect(response_body).to eq(
-        {
-          error: "Couldn't find User",
-          status: 404
-        }.as_json
-      )
+      expect(response_body['error']).to eq("Couldn't find User")
+      expect(response_body['status']).to eq(404)
     end
 
     it 'returns unauthorized when the password does not match' do
-      user = create(:user)
       post '/api/v1/login', params: { login: { email: user.email, password: 'wrong_password' } }
 
       expect(response).to have_http_status(:unauthorized)
-      expect(response_body).to eq(
-        { error: 'Invalid password', status: 401 }.as_json
-      )
+      expect(response_body['error']).to eq('Invalid password')
+      expect(response_body['status']).to eq(401)
     end
   end
 end

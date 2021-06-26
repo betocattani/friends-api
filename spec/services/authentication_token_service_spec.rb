@@ -17,12 +17,8 @@ describe AuthenticationTokenService do
         { algorithm: described_class::ALGORITHM_TYPE }
       )
 
-      expect(decoded_token).to eq(
-        [
-          { user_id: user.id },
-          { alg: 'HS256' }
-        ].as_json
-      )
+      expect(decoded_token[0]['user_id']).to eq(user.id)
+      expect(decoded_token[1]['alg']).to eq('HS256')
     end
   end
 end
