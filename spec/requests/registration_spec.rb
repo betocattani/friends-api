@@ -33,15 +33,12 @@ describe 'Registration', type: :request do
         }.not_to change(User, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response_body).to eq({
-          errors: [
-            {
-              field: 'password',
-              detail: "can't be blank"
-            }
-          ],
-          status: 422
-        }.as_json)
+        expect(response_body['status']).to eq(422)
+
+        response_body_errors = response_body['errors'].first
+
+        expect(response_body_errors['field']).to eq('password')
+        expect(response_body_errors['detail']).to eq("can't be blank")
       end
     end
   end

@@ -52,9 +52,9 @@ describe 'Users API', type: :request do
         get '/api/v1/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 
-        expect(response_body).to eq({ error: 'Unauthorized', status: 401 }.as_json)
-
         expect(response).to have_http_status(:unauthorized)
+        expect(response_body['error']).to eq('Unauthorized')
+        expect(response_body['status']).to eq(401)
       end
     end
   end
