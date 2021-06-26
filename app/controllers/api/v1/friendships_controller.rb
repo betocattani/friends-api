@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_user, only: [:create, :index]
 
       def index
-        friends = @current_user.friends
+        friends = @current_user.friends.limit(limit).offset(params[:offset])
 
         render json: friends, each_serializer: FriendSerializer
       end
