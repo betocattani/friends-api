@@ -2,7 +2,9 @@
 
 module Api
   module V1
-    class FriendsSerializer < ActiveModel::Serializer
+    class FriendSerializer < ActiveModel::Serializer
+      type :friend
+
       attributes :name, :email
     end
   end

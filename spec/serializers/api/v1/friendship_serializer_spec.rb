@@ -3,22 +3,35 @@
 require 'rails_helper'
 
 describe Api::V1::FriendshipSerializer, type: :serializer do
-  let(:friendship) { create(:friendship) }
+  let!(:user) { create(:user) }
+  let!(:friendship) { create(:friendship, user: user) }
 
-  subject(:serializer) { described_class.new(friendship).as_json }
+  subject(:serializer) do
+    ActiveModelSerializers::SerializableResource.new(
+      friendship,
+      each_serializer: Api::V1::FriendshipSerializer
+    ).to_json
+  end
 
-  it 'returns a user serialized' do
+  it 'returns a friendship serialized' do
     expected_response = {
-      "user": {
-        "name": friendship.user.name,
-        "email": friendship.user.email
-      },
-      "friend": {
-        "name": friendship.friend.name,
-        "email": friendship.friend.email
+      "friendship": {
+        "user": {
+          "name": user.name,
+          "email": user.email
+        },
+        "friend": {
+          "name": friendship.friend.name,
+          "email": friendship.friend.email
+        }
       }
-    }
+    }.as_json
 
-    expect(serializer).to eq(expected_response)
+    parsed_serializer = JSON.parse(serializer)
+
+    expect(parsed_serializer).to include('friendship')
+    expect(parsed_serializer['friendship']).to include('user')
+    expect(parsed_serializer['friendship']).to include('friend')
+    expect(parsed_serializer).to eq(expected_response)
   end
 end

@@ -8,16 +8,16 @@ module Api
       def index
         friends = @current_user.friends
 
-        render json: friends, root: 'friends', each_serializer: Api::V1::FriendsSerializer
+        render json: friends, each_serializer: FriendSerializer
       end
 
       def create
-        friend = User.find_by(email: params[:email])
+        friend = User.find_by!(email: params[:email])
 
         friendship = Friendship.new(user_id: @current_user.id, friend_id: friend.id)
 
         if friendship.save
-          render json: { friendship: FriendshipSerializer.new(friendship).as_json }, status: :created
+          render json: friendship, serializer: FriendshipSerializer, status: :created
         else
           respond_with_errors(friendship)
         end
