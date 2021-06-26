@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 describe 'Users API', type: :request do
+  let!(:user) { create(:user, id: 1, email: 'user_one@mail.com') }
+  let!(:friend) { create(:user, id: 2, email: 'user_two@mail.com') }
+
   describe 'GET /users' do
     context 'when exist users and token is valid' do
       it 'returns a list of users' do
-        create(:user, id: 1, email: 'user_one@mail.com')
-        create(:user, id: 2, email: 'user_two@mail.com')
-
         get '/api/v1/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
@@ -18,9 +18,6 @@ describe 'Users API', type: :request do
       end
 
       it 'retuns a subset of users based on limit' do
-        create(:user, id: 1, email: 'user_one@mail.com')
-        create(:user, id: 2, email: 'user_two@mail.com')
-
         get '/api/v1/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' },
             params: { limit: 1 }
@@ -31,9 +28,6 @@ describe 'Users API', type: :request do
       end
 
       it 'retuns a subset of users based on limit and offset' do
-        create(:user, id: 1, email: 'user_one@mail.com')
-        create(:user, id: 2, email: 'user_two@mail.com')
-
         get '/api/v1/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' },
             params: { limit: 1, offset: 1 }
@@ -46,9 +40,6 @@ describe 'Users API', type: :request do
 
     context 'when exist users and token is invalid' do
       it 'returns a list of users' do
-        create(:user, id: 1, email: 'user_one@mail.com')
-        create(:user, id: 2, email: 'user_two@mail.com')
-
         get '/api/v1/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 

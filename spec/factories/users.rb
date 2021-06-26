@@ -9,5 +9,11 @@ FactoryBot.define do
     factory :invalid_contact do
       first_name { nil }
     end
+
+    trait :friend do
+      name { Faker::Name.first_name }
+      email { Faker::Internet.email }
+      password { Faker::Internet.password }
+    end
   end
 end

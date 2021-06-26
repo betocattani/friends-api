@@ -3,22 +3,19 @@
 require 'rails_helper'
 
 describe Api::V1::FriendshipSerializer, type: :serializer do
-  let(:user) { create(:user) }
-  let(:friend) { create(:user) }
-
-  let(:friendship) { Friendship.create(user_id: user.id, friend_id: friend.id) }
+  let(:friendship) { create(:friendship) }
 
   subject(:serializer) { described_class.new(friendship).as_json }
 
   it 'returns a user serialized' do
     expected_response = {
       "user": {
-        "name": user.name,
-        "email": user.email
+        "name": friendship.user.name,
+        "email": friendship.user.email
       },
       "friend": {
-        "name": friend.name,
-        "email": friend.email
+        "name": friendship.friend.name,
+        "email": friendship.friend.email
       }
     }
 

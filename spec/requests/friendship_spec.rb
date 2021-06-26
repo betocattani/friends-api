@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 describe 'Friendship', type: :request do
+  let!(:current_user) { create(:user, id: 1, email: 'user_one@mail.com') }
+  let(:friend) { create(:user, id: 2, email: 'user_two@mail.com') }
+
   describe 'POST /users/:email/friendship' do
     it 'creates a new friendship with valid token' do
-      create(:user, id: 1, email: 'user_one@mail.com')
-      friend = create(:user, id: 2, email: 'user_two@mail.com')
-
       post "/api/v1/users/#{friend.email}/friendship",
            headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
@@ -16,9 +16,6 @@ describe 'Friendship', type: :request do
     end
 
     it 'does not creates a new friendship with invalid token and returns unauthorized' do
-      create(:user, id: 1, email: 'user_one@mail.com')
-      friend = create(:user, id: 2, email: 'user_two@mail.com')
-
       post "/api/v1/users/#{friend.email}/friendship",
            headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 
@@ -29,13 +26,10 @@ describe 'Friendship', type: :request do
   end
 
   describe 'GET /users/me/friends' do
+    let!(:frienship) { create(:friendship, user: current_user, friend: friend) }
+
     context 'when user has friends and the token is valid' do
       it 'returns a list of friends' do
-        current_user = create(:user, id: 1, email: 'user_one@mail.com')
-        friend = create(:user, id: 2, email: 'user_two@mail.com')
-
-        Friendship.create(user_id: current_user.id, friend_id: friend.id)
-
         get '/api/v1/users/me/friends',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
@@ -47,11 +41,6 @@ describe 'Friendship', type: :request do
 
     context 'when user has friends and the token is invalid' do
       it 'returns a unauthorized' do
-        current_user = create(:user, id: 1, email: 'user_one@mail.com')
-        friend = create(:user, id: 2, email: 'user_two@mail.com')
-
-        Friendship.create(user_id: current_user.id, friend_id: friend.id)
-
         get '/api/v1/users/me/friends',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 
