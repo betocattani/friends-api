@@ -8,7 +8,7 @@ module Api
       rescue_from AuthenticationError, with: :unauthorized
 
       def create
-        return unless validate_authentication_params
+        validate_authentication_params
         raise AuthenticationError unless user.authenticate(authentication_params[:password])
 
         token = AuthenticationTokenService.call(user.id)

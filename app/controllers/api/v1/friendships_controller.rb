@@ -3,7 +3,7 @@
 module Api
   module V1
     class FriendshipsController < ApplicationController
-      before_action :authenticate_user, only: [:create, :index]
+      before_action :authenticate_user, only: %I[create index]
 
       def index
         friends = @current_user.friends.limit(limit).offset(params[:offset])
