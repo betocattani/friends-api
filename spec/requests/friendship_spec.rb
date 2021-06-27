@@ -8,7 +8,7 @@ describe 'Friendship', type: :request do
 
   describe 'POST /users/:email/friendship' do
     it 'creates a new friendship with valid token' do
-      post "/api/v1/users/#{friend.email}/friendship",
+      post "/users/#{friend.email}/friendship",
            headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
       expect(response).to have_http_status(:created)
@@ -16,7 +16,7 @@ describe 'Friendship', type: :request do
     end
 
     it 'does not creates a new friendship with invalid token and returns unauthorized' do
-      post "/api/v1/users/#{friend.email}/friendship",
+      post "/users/#{friend.email}/friendship",
            headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 
       expect(response).to have_http_status(:unauthorized)
@@ -30,7 +30,7 @@ describe 'Friendship', type: :request do
 
     context 'when user has friends and the token is valid' do
       it 'returns a list of friends' do
-        get '/api/v1/users/me/friends',
+        get '/users/me/friends',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
         expect(response).to have_http_status(:success)
@@ -41,7 +41,7 @@ describe 'Friendship', type: :request do
 
     context 'when user has friends and the token is invalid' do
       it 'returns a unauthorized' do
-        get '/api/v1/users/me/friends',
+        get '/users/me/friends',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 
         expect(response).to have_http_status(:unauthorized)

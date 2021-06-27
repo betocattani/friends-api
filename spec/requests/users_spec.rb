@@ -9,7 +9,7 @@ describe 'Users API', type: :request do
   describe 'GET /users' do
     context 'when exist users and token is valid' do
       it 'returns a list of users' do
-        get '/api/v1/users',
+        get '/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' }
 
         expect(response_body['users'].pluck('email')).to eq(['user_one@mail.com', 'user_two@mail.com'])
@@ -18,7 +18,7 @@ describe 'Users API', type: :request do
       end
 
       it 'retuns a subset of users based on limit' do
-        get '/api/v1/users',
+        get '/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' },
             params: { limit: 1 }
 
@@ -28,7 +28,7 @@ describe 'Users API', type: :request do
       end
 
       it 'retuns a subset of users based on limit and offset' do
-        get '/api/v1/users',
+        get '/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.Jddfq3-7sAXByGP8q58Iu43FIMA1DW1Kz_08tGb9VKI' },
             params: { limit: 1, offset: 1 }
 
@@ -40,7 +40,7 @@ describe 'Users API', type: :request do
 
     context 'when exist users and token is invalid' do
       it 'returns a list of users' do
-        get '/api/v1/users',
+        get '/users',
             headers: { 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzAwMCJ9.7G4mkKBj5yGiFfnK4t0FXaTze8RvKk-NUsZaFnbwNQ0' }
 
         expect(response).to have_http_status(:unauthorized)

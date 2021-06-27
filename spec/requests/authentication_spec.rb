@@ -7,14 +7,14 @@ describe 'Authentication', type: :request do
 
   describe 'POST /login' do
     it 'returns an authenticated user' do
-      post '/api/v1/login', params: { login: { email: user.email, password: user.password } }
+      post '/login', params: { login: { email: user.email, password: user.password } }
 
       expect(response).to have_http_status(:created)
       expect(response_body).to include('token')
     end
 
     it 'returns error when email is missing' do
-      post '/api/v1/login', params: { login: { password: 'Password1' } }
+      post '/login', params: { login: { password: 'Password1' } }
 
       expect(response).to have_http_status(:unprocessable_entity)
 
@@ -23,7 +23,7 @@ describe 'Authentication', type: :request do
     end
 
     it 'returns error when password is missing' do
-      post '/api/v1/login', params: { login: { email: 'email@mail.com' } }
+      post '/login', params: { login: { email: 'email@mail.com' } }
 
       expect(response).to have_http_status(:unprocessable_entity)
 
@@ -32,7 +32,7 @@ describe 'Authentication', type: :request do
     end
 
     it 'returns not_found when does not exist an user with the requested email' do
-      post '/api/v1/login', params: { login: { email: 'non_existent@mail.com', password: user.password } }
+      post '/login', params: { login: { email: 'non_existent@mail.com', password: user.password } }
 
       expect(response).to have_http_status(:not_found)
       expect(response_body['error']).to eq("Couldn't find User")
@@ -40,7 +40,7 @@ describe 'Authentication', type: :request do
     end
 
     it 'returns unauthorized when the password does not match' do
-      post '/api/v1/login', params: { login: { email: user.email, password: 'wrong_password' } }
+      post '/login', params: { login: { email: user.email, password: 'wrong_password' } }
 
       expect(response).to have_http_status(:unauthorized)
       expect(response_body['error']).to eq('Invalid password')
