@@ -14,7 +14,7 @@ module Api
       def create
         friend = User.find_by!(email: params[:email])
 
-        friendship = Friendship.new(user_id: @current_user.id, friend_id: friend.id)
+        friendship = @current_user.friendships.build(friend_id: friend.id)
 
         if friendship.save
           render json: friendship, serializer: FriendshipSerializer, status: :created
