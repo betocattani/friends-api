@@ -1,6 +1,4 @@
-## Assignment Summary
-
-The focus of this assignment is to see how you would build an API for a web application using Ruby on Rails.
+# Friends API 
 
 This assignment will cover the signup, login endpoints as well as an additional resource users and friends that can be accessed if you are logged in.
 
@@ -8,7 +6,6 @@ To determine whether a request is from a logged in user or not, we'll be using J
 
 For the database, please use PostgreSQL.
 
-Also feel free to use whatever open source packages you're comfortable with, but be sure to implement the database models and relations logic yourself.
 
 ## API Specifications
 
@@ -19,9 +16,9 @@ Endpoint to create a user in the database. The payload should follow this struct
 ```json
 {
   "user": {
-    "email": "test@axiomzen.co",
-    "name": "Alex Zimmerman",
-    "password": "axiomzen"
+    "email": "john.doe@mail.com",
+    "name": "John Doe",
+    "password": "secr3t"
   }
 }
 ```
@@ -41,8 +38,8 @@ Endpoint to log a user in. The payload should have the following fields:
 ```json
 {
   "login": {
-    "email": "test@axiomzen.co",
-    "password": "axiomzen"
+    "email": "john.doe@mail.com",
+    "password": "secr3t"
   }
 }
 ```
@@ -64,8 +61,8 @@ The response body should look like:
 {
   "users": [
     {
-      "name": "Alex Zimmerman",
-      "email": "test@axiomzen.co"
+      "name": "John Doe",
+      "email": "john.doe@mail.com"
     }
   ]
 }
@@ -105,34 +102,12 @@ The response body should look like:
 {
   "friends": [
     {
-      "name": "Alex Zimmerman",
-      "email": "test@axiomzen.co"
+      "name": "John Doe",
+      "email": "john.doe@mail.com"
     }
   ]
 }
 ```
-
-### Tasks
-- [X] Create the project
-- [X] Install and config RSpec
-- [X] Install Faker and Factory Bot
-- [X] Creates User model
-- [X] Creates Authorization layer
-- [X] Create Specs (models / requests / serializers)
-- [X] Add pagination
-- [X] Creates serializers
-- [X] Creates Friendship model
-- [X] Add association User to Friendship
-- [X] Create current_user
-- [X] Add Authentication to friendship resources
-- [X] Create Dockerfile
-- [X] Create docker-compose.yml
-- [X] Improve Readme with setup instructions
-- [X] Creates Seeds
-- [X] Appl Scope on rails routes
-- [X] Answer QA's document
-- [X] Rubocop
-- [X] Creates documentation
 
 ### Endpoints
 - [X] Authentication Signup
@@ -204,21 +179,6 @@ $ docker-compose up
 ```
 
 ```bash
-# stop docker server.pid force
-$ sudo rm tmp/pids/server.pid 
-```
-
-```bash
-# list docker images
-$ docker image ls
-```
-
-```bash
-# list docker containers
-$ docker container ls
-```
-
-```bash
 # Setup database
 $ docker exec -it friends-api_web_1 bin/rails db:setup
 ```
@@ -226,11 +186,4 @@ $ docker exec -it friends-api_web_1 bin/rails db:setup
 ```bash
 # Running rails migrations
 $ docker exec -it <friends-api_web_1> bin/rails db:migrate
-```
-
-```bash
-# access rails console
-$ docker container ls
-$ docker ps
-$ docker exec -it <container_id> bin/rails c
 ```
